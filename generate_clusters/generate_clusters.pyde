@@ -5,7 +5,13 @@ background(0)
 stroke(255)
 noStroke()
 
-
+radius = 150
+offset_mag = 40
+hole_size = 40
+noise_amount = 1000
+# noise_amount = 0
+cluster_amount = 2000
+    
 def generate(filename):
     points = []
 
@@ -27,11 +33,7 @@ def generate(filename):
             ellipse(r.x, r.y, 5, 5)
             points.append([r.x, r.y])
 
-    radius = 150
-    offset_mag = 40
-    hole_size = 40
-    noise_amount = 1000
-    cluster_amount = 2000
+    
 
     one = PVector(225, height / 2)
     two = PVector(375, height / 2)
@@ -58,4 +60,5 @@ def show_data(filename):
 
 
 # show_data('data/with_noise.csv')
-generate('data/without_noise.csv')
+generate('data/with_noise.csv')
+saveFrame('with_noise.jpeg')
