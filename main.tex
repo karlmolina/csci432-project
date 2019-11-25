@@ -6,7 +6,7 @@
 \usepackage[noend]{algpseudocode}
 
 
-\title{Group 11 P3}
+\title{Group 11 Advanced Algorithms Project}
 \author{Arnold Smithson, Karl Molina, Kyle Webster}
 \date{November 2019}
 
@@ -71,6 +71,11 @@ The pseudocode in this section is taken from \cite{gunawan2013faster}. The funct
     }
  \caption{ExpandCluster($p$, $NeighborPts$, $C$, $\epsilon$, $minPts$)}
 \end{algorithm}
+\newpage
+\section{Plus One}
+This algorithm has a heavy background in machine learning, a topic some people might not explore while they earn their Computer Science degree or in a career in general. There are some examples, but a lot of them aren't clearly explained or aren't very transparent in every step. Thus, for the plus one element of our project, we plan to show how DBSCAN works using a graphical presentation and visually compare the results with another clustering algorithm known as K-Means Clustering. By using the p5 python package to plot points in an animation-like style, we are going to show how different parameters of DBSCAN, such as $eps$ and $minPts$, affect the resulting clusters. When we are running K-Means, we will use the same number of clusters that DBSCAN found. For simplicity of visualization, we will use a two feature data set so that we can plot the data points in a two-dimensional space. 
+
+When first showing how the algorithm works, we will use a small data set to exemplify the circle of radius $eps$ around each point and how points are separated into core points, border points, and noise points by color-coding each type of point. On a large data set we will show the effects of changing the parameters of the algorithm $minPts$ and $eps$. To show an example of tuning the algorithm we will start with bad parameters and slowly improve them. Once we show the results of the tuned DBSCAN algorithm we will see that DBSCAN can find clusters that are not convex. To show the different clusters that were found we will use different symbols and colors. We will run the same data set with K-Means and show that K-Means clusters must be convex. This will show that DBSCAN will find more types of clusters than K-Means. We will also run a different data set with both algorithms to show how each algorithm deals with noise. For our data set we plan on creating our own contrived set that easily shows non convex clusters. Then, we will add random points to that data set to act as noise. 
 
 \newpage
 \bibliography{bibliography}
