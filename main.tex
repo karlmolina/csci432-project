@@ -1,0 +1,28 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{Group11P5}
+\author{Arnold Smithson, Karl Molina, Kyle Webster }
+\date{November 2019}
+
+\begin{document}
+
+\maketitle
+
+\section{Progress Report}
+
+With the end goal of a video demonstrating the visualization of DBSCAN in mind, progress has been coming steadily. The program, written in Python, has been created to run the algorithm based on the data we generated with the capability to extend the code as necessary to implement the visualization aspect. The algorithm itself is relatively straightforward to code due to generic sudocode we found in many different resources online as well as the sudocode being gone over in the machine learning course. \\ \\
+We have finished the data generation phase of our project and data analysis to determine that our data contains 2 distinct clusters. We are currently finishing with the integration of both K-Means and DBSCAN Clustering with the dataset. We are also working on the integration of the graphing methods to demonstrate the algorithm.\\
+\\
+The most difficult part of creating the graphs is to demonstrate the progression for each step. Graphs in Python typically only plot when the algorithm is finished the calculations on the data (see Matplotlib and Pandas modules). To combat this, two different methods are available for use:
+
+\begin{enumerate}
+    \item Create a series of graphs showcasing each step to aid in the explanation of what is happening during the video. This might be the the simplest considering a new graph can be made using Matplotlib at each step of the loop in the algorithm. The downside of this option would be the size complexity of our program would dramatically increase due to having to save multiple versions of the datapoints.
+
+    \item 
+    Find a Python module that will aid in creating and showcasing the process each step of the way while the algorithm creates the data clusters. This might be more difficult to achieve considering our previous experience regarding making dynamic graphs using python is somewhat limited. One option of a module to utilize is the Matplotlib animation library which will allow for a graph to check for updates in the data.
+\end{enumerate}
+\noindent
+Once the graphs of each step are created, the next step will be regular meetings to create the main video before we present on Monday, December 2. We will work on a video that will demonstrate the code and and then demonstrate the execution with the graph. We will be explaining how it works throughout the video. Once we finish explaining it, we will open up to the floor for potential questions regarding the algorithm itself, the concepts of machine learning and clustering, or the contents of the video.
+
+\end{document}
