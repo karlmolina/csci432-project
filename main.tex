@@ -1,39 +1,80 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
+\usepackage{algorithm2e}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
 
-\title{Group 11 Project Part 2}
-\author{Kyle Webster, Arnold Smithson, Karl Molina }
-\date{October 2019}
+
+\title{Group 11 P3}
+\author{Arnold Smithson, Karl Molina, Kyle Webster}
+\date{November 2019}
 
 \begin{document}
 
 \maketitle
 
-\section{Algorithm 1: TwoFish Encryption Algorithm}
-The TwoFish Encryption Algorithm was developed for the competition to develop the next Advanced Encryption Standard. The competition was hosted by the National Institute of Standards and Technology. The goal of the new AES standard was an increase in security over the current Data Encryption Standard  utilized before 1998. While TwoFish did not win the competition due to it's higher memory cost with pre-computed matrices, it is interesting due to it's efficient usage of linear mapping properties and the hardware specifications to efficiently encrypt the data.
+\section{Introduction}
 
-The encryption algorithm that was to be decided had to meet various requirements to become the AES standard for all computers. This meant that not only did the program have be executable on any machine, but it also has to have low RAM requirements while having an efficient run time. It had to be a symmetric key encryption algorithm where the same key can encrypt and decrypt the algorithm. The algorithm also had to handle 128 bit blocks to encrypt and decrypt. The algorithm also had to be multi-purpose by not only being an encryption algorithm, but it also had to handle hardware encryption, stream cyphers, have hashing capabilities, a media access controller, a pseudo-random number generator, and being compatable with 32 and 64 bit CPU's \cite{TwoFish}.
+Suppose an organization such as Amazon wants to group customers based on their purchase history to recommend other products to a given customer. The organization attempts to take a customer's purchase history and compare it to other customers with similar purchases. This is an example of where a DBSCAN algorithm would be useful. DBSCAN, otherwise expanded as Density-Based Spatial Clustering of Applications with Noise, is a data-clustering algorithm meant to solve the general problem of "How are these data points related?" For the customers examined above, they could be clustered based on items that they both bought. However, DBSCAN has many other applications.
 
-TwoFish has accomplished all of these tasks and is still utilized as an extra encryption layer that has not successfully been cracked. It is an efficient program that can be run utilizing only 320 clock cycles per 128 bit block on an Intel Pentium Pro with 12700 clock-cycle key \cite{TwoFish}. The algorithm utilizes a key-dependent S-Block utilizing half of the 128 bit key. TwoFish also utilizes a Maximum Distance Matrix which maps input vectors between linear spaces utilizing a Reed-Solomon error corrections. The algorithm then utilizes a 32 bit pseudo-Hadamard transform to efficiently mix the input values. The output values are then XOR'd with the key to scramble the values further. The algorithm then shuffles the halves of the key is used to encrypt the data. Running this process again creates a single round in a Feistel Network, and TwoFish runs this another 15 times. This allows for a relatively efficient method to encrypt and decrypt 128 bit, 192 bit, and 256 bit blocks of values on multiple applications. \cite{TwoFish} 
+\section{Background}
 
-%NOTE: Something we can try is removing one-bit rotation and having the whole key be used for the S-boxes
-\section{Algorithm 2: The Doomsday Algorithm}
+The inception of the first DBSCAN algorithm began in 1996 when Ester used the newly-created algorithm to sort a large number of data points despite the presence of noise in databases \cite{ester1996density}. To do this, the algorithm employs a "nearest-neighbor"-esque line of thinking. It classifies each point as either a boarder point, a core point, or noise by determining the number of points within a spherical radius of it. The number of points within a spherical radius is a tunable parameter which determines the classification of the points. For example, if the number of points required is 5, then a core point is a point with 5 points within it's spherical radius. A border point is a point that does not have the required number of points to become a core point, but one of the points in it's sphere is a core point. A noise point is one that fails both the numbers and the check to see if the points within it's sphere is a core point. The clustering groups the core points to other core and border points until distinct clusters are created and no core points remain. Using the example above, we can take a customer and group them based on their purchase compared to other customers. If they bought a cat toy and a cat bed and other customers purchased a cat toy, cat bed, and cat litter, then the algorithm will group them together for the same recommendations of cat food. 
 
-The problem this algorithm solves is the question, "What day of the week does this specific date land on?" Of course, this specific date can mean any date the user chooses to input. This algorithm was conceived in the seventies by a man named John Conway \cite{conway}. An earlier version of this algorithm that works with the Julian calendar rather than the Gregorian Calendar was created by Lewis Carroll, who used very similar methods to determine what day of the week a certain date fell onto. This algorithm would help someone determine what day of the week they'd need to plan for without the use of a phone, calendar, or anything except their brain and maybe a writing utensil and paper. One of the main aspects of this algorithm uses the concept of $doomsdays$, which are days that fall on the same weekday in any given year for a certain century. \cite{carroll}
+\section{Applications}
+Clustering of data points is an unsupervised machine learning method, meaning that you may not know exactly what the clusters may represent. DBSCAN has advantages over other clustering methods because by the nature of the algorithm the clusters do not need to be convex. A clustering method such as K-Means defines clusters by the closest points by distance to a centroid point. This means that the clusters will be spherical in shape. DBSCAN uses every core point to find a cluster which means that it can result in non-convex clusters. By understanding the algorithm we know that it inherently will deal with noise in the given data set. Algorithms like K-Means will put each point in a cluster and has no way of describing what points are considered noise.
 
-This algorithm can have a couple of different run times, depending on if a human is calculating it or if a computer is. If a computer is running the algorithm, it's somewhere between $O(n)$ and $O(1)$ where n is the list of things memorized because there are certain things that should be memorized and can be pulled from to begin calculations. If a human is calculating it, it could take anywhere between under two seconds and probably around fifteen minutes. If someone isn't used to this algorithm, they'll need to look at every step and do the math each time. However, for people like the creator of this algorithm, John Conway, he can perform the calculation in under two seconds because he constantly practices the calculations throughout his day.\cite{conway}
+A downfall of DBSCAN is that it can increase greatly in time complexity with the amount of features that a data point has \cite{Gan:2015:DRM:2723372.2737792}. Gan and Tao \cite{Gan:2015:DRM:2723372.2737792} show that DBSCAN can be infeasible for a feature dimension greater than 2 in which they suggest an altered approximate DBSCAN algorithm. However, the dimensionality constraint can be combated with feature selection. In summary, we find that we can apply DBSCAN to clustering problems where the clusters may not be convex. We can also apply it to noisy data. However, we must be careful when using data sets with a high number of features.
 
-I researched this algorithm because I wanted to find a simple, yet interesting algorithm that solved a problem not many would think of as a problem one might encounter frequently, especially today in the age of smartphones. This algorithm, while having some hoops to jump through, can solve the problem extremely fast if the information to be memorized isn't too large. 
+\section{Pseudocode}
+The pseudocode in this section is taken from \cite{gunawan2013faster}. The function $RangeQuery(p, \epsilon)$ finds all points in the data set $D$ that are less than $\epsilon$ distance away from point $p$. This algorithm loops through all the points in a data set and finds the core points. The core points have $minPts$ number of points in a hyper-sphere around them of distance $\epsilon$. It then assigns a core point to a cluster and expands the cluster to include any neighboring points. When its finished, all clusters will consist of neighboring core points and other neighboring points. Any other point will be labeled as noise.
 
+\begin{algorithm}[H]
+    // $D$ is a set of unclassified points\;
+    
+    // $\epsilon$ is the maximum distance
+    
+    // $minPts$ is the minimum \# of points to form a cluster
+    
+    Initialize cluster id C = 0\;
+    
+    \For{each unclassified point $p \in D$}{
+        $N_\epsilon(p) \gets RangeQuery(p,\epsilon)$
+        
+        \eIf{$|N_\epsilon(p)| \geq minPts$}{
+            Set $p$'s cluster id to $C$
+            
+            $ExpandCluster(p, N_\epsilon(p), C, \epsilon, minPts)$
+            
+            $C \gets C + 1$
+        }{
+            Label p as noise
+        }
+    }
+ \caption{DBSCAN($D$, $\epsilon$, $minPts$)}
+\end{algorithm}
 
-\section{Algorithm 3: Voronoi-Based Surface Reconstruction Algorithm}
+\begin{algorithm}[H]
+    
+    \For{each point $q \in NeighborPts$}{
+        \If{q is unclassified}{
+            $N_\epsilon(p) \gets RangeQuery(p,\epsilon)$
+            
+            \If{$|N_\epsilon(p)| \geq minPts$}{
+                $NeighborPts \gets NeighborPts \cup N_\epsilon(p)$
+            }
+        }
+        \If{q does not belong to any cluster}{
+            Set $q$'s cluster id to C
+        }
+    }
+ \caption{ExpandCluster($p$, $NeighborPts$, $C$, $\epsilon$, $minPts$)}
+\end{algorithm}
 
-This algorithm was created to solve the following problem. Given a set of points in three-dimensional space that are supposed to represent a surface, reconstruct that surface. We would like the reconstructed surface to be as similar to the original surface as possible. The solution to this problem has many applications such as imaging in the medical industry and mapping seismic or radar data \cite{amenta1998new}. 
-
-While the input of the algorithm is the points in three-dimensional space, the output should describe a surface as a set of connected polygons. Other things to think about when solving this problem is that in real world applications the data could contain noise. Also you may not have a ``good" set of sample data. This brings the question of what ``good`` data looks like. From \cite{amenta1998new} we find that this might mean there is a high density of samples near complicated features of the surface, while there could be a low density of sample points in places where the surface is smooth. Our problem can also be constrained by finding a correct algorithm that is efficient and accurate. In order to measure efficiency we can look at the time complexity of the algorithm. In practice, we can look at the time the algorithm takes given a certain number of points. We also can look at accuracy by comparing the original surface to our output surface. 
-
-The surface reconstruction algorithm defined by \cite{amenta1998new} is described a crust algorithm. It uses the three-dimensional Voronoi diagram of the given set of points along with the Delaunay triangulation. The crust algorithm has advantages over other algorithms such as the $\alpha$-shape algorithm and the zero-set algorithm because it does not have to be tuned with an $\alpha$ parameter and it is more simple.
-
-\bibliography{bibliography.bib} 
+\newpage
+\bibliography{bibliography}
 \bibliographystyle{ieeetr}
+
+
 \end{document}
