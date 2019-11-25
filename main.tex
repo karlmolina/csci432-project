@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{Group 11 Project Part 2}
+\author{Kyle Webster, Arnold Smithson, Karl Molina }
+\date{October 2019}
+
+\begin{document}
+
+\maketitle
+
+\section{Algorithm 1: TwoFish Encryption Algorithm}
+The TwoFish Encryption Algorithm was developed for the competition to develop the next Advanced Encryption Standard. The competition was hosted by the National Institute of Standards and Technology. The goal of the new AES standard was an increase in security over the current Data Encryption Standard  utilized before 1998. While TwoFish did not win the competition due to it's higher memory cost with pre-computed matrices, it is interesting due to it's efficient usage of linear mapping properties and the hardware specifications to efficiently encrypt the data.
+
+The encryption algorithm that was to be decided had to meet various requirements to become the AES standard for all computers. This meant that not only did the program have be executable on any machine, but it also has to have low RAM requirements while having an efficient run time. It had to be a symmetric key encryption algorithm where the same key can encrypt and decrypt the algorithm. The algorithm also had to handle 128 bit blocks to encrypt and decrypt. The algorithm also had to be multi-purpose by not only being an encryption algorithm, but it also had to handle hardware encryption, stream cyphers, have hashing capabilities, a media access controller, a pseudo-random number generator, and being compatable with 32 and 64 bit CPU's \cite{TwoFish}.
+
+TwoFish has accomplished all of these tasks and is still utilized as an extra encryption layer that has not successfully been cracked. It is an efficient program that can be run utilizing only 320 clock cycles per 128 bit block on an Intel Pentium Pro with 12700 clock-cycle key \cite{TwoFish}. The algorithm utilizes a key-dependent S-Block utilizing half of the 128 bit key. TwoFish also utilizes a Maximum Distance Matrix which maps input vectors between linear spaces utilizing a Reed-Solomon error corrections. The algorithm then utilizes a 32 bit pseudo-Hadamard transform to efficiently mix the input values. The output values are then XOR'd with the key to scramble the values further. The algorithm then shuffles the halves of the key is used to encrypt the data. Running this process again creates a single round in a Feistel Network, and TwoFish runs this another 15 times. This allows for a relatively efficient method to encrypt and decrypt 128 bit, 192 bit, and 256 bit blocks of values on multiple applications. \cite{TwoFish} 
+
+%NOTE: Something we can try is removing one-bit rotation and having the whole key be used for the S-boxes
+\section{Algorithm 2: The Doomsday Algorithm}
+
+The problem this algorithm solves is the question, "What day of the week does this specific date land on?" Of course, this specific date can mean any date the user chooses to input. This algorithm was conceived in the seventies by a man named John Conway \cite{conway}. An earlier version of this algorithm that works with the Julian calendar rather than the Gregorian Calendar was created by Lewis Carroll, who used very similar methods to determine what day of the week a certain date fell onto. This algorithm would help someone determine what day of the week they'd need to plan for without the use of a phone, calendar, or anything except their brain and maybe a writing utensil and paper. One of the main aspects of this algorithm uses the concept of $doomsdays$, which are days that fall on the same weekday in any given year for a certain century. \cite{carroll}
+
+This algorithm can have a couple of different run times, depending on if a human is calculating it or if a computer is. If a computer is running the algorithm, it's somewhere between $O(n)$ and $O(1)$ where n is the list of things memorized because there are certain things that should be memorized and can be pulled from to begin calculations. If a human is calculating it, it could take anywhere between under two seconds and probably around fifteen minutes. If someone isn't used to this algorithm, they'll need to look at every step and do the math each time. However, for people like the creator of this algorithm, John Conway, he can perform the calculation in under two seconds because he constantly practices the calculations throughout his day.\cite{conway}
+
+I researched this algorithm because I wanted to find a simple, yet interesting algorithm that solved a problem not many would think of as a problem one might encounter frequently, especially today in the age of smartphones. This algorithm, while having some hoops to jump through, can solve the problem extremely fast if the information to be memorized isn't too large. 
+
+
+\section{Algorithm 3: Voronoi-Based Surface Reconstruction Algorithm}
+
+This algorithm was created to solve the following problem. Given a set of points in three-dimensional space that are supposed to represent a surface, reconstruct that surface. We would like the reconstructed surface to be as similar to the original surface as possible. The solution to this problem has many applications such as imaging in the medical industry and mapping seismic or radar data \cite{amenta1998new}. 
+
+While the input of the algorithm is the points in three-dimensional space, the output should describe a surface as a set of connected polygons. Other things to think about when solving this problem is that in real world applications the data could contain noise. Also you may not have a ``good" set of sample data. This brings the question of what ``good`` data looks like. From \cite{amenta1998new} we find that this might mean there is a high density of samples near complicated features of the surface, while there could be a low density of sample points in places where the surface is smooth. Our problem can also be constrained by finding a correct algorithm that is efficient and accurate. In order to measure efficiency we can look at the time complexity of the algorithm. In practice, we can look at the time the algorithm takes given a certain number of points. We also can look at accuracy by comparing the original surface to our output surface. 
+
+The surface reconstruction algorithm defined by \cite{amenta1998new} is described a crust algorithm. It uses the three-dimensional Voronoi diagram of the given set of points along with the Delaunay triangulation. The crust algorithm has advantages over other algorithms such as the $\alpha$-shape algorithm and the zero-set algorithm because it does not have to be tuned with an $\alpha$ parameter and it is more simple.
+
+\bibliography{bibliography.bib} 
+\bibliographystyle{ieeetr}
+\end{document}
