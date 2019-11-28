@@ -51,14 +51,5 @@ def generate(filename):
 
     saveStrings(filename, points)
 
-
-def show_data(filename):
-    for line in loadStrings(filename):
-        x = line.split(',')
-        x = [int(a) for a in x]
-        ellipse(x[0], x[1], 5, 5)
-
-
-# show_data('data/with_noise.csv')
 generate('data/with_noise.csv')
-saveFrame('with_noise.jpeg')
+# saveFrame('with_noise.jpeg')

@@ -5,7 +5,7 @@ background(0)
 stroke(255)
 noStroke()
 
-noise_amount = 100
+noise_amount = 0
 gaussian = False
 
 def generate_convex_clusters(filename):
@@ -42,4 +42,4 @@ def generate_convex_clusters(filename):
     saveStrings(filename, points)
 
 
-generate_convex_clusters('data/with_noise.csv')
+generate_convex_clusters('data/without_noise.csv')
