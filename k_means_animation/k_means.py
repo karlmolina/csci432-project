@@ -10,6 +10,8 @@ class KMeans:
         self.centroids = []
         self.centroid_assignments = {}
         self.min_change = min_change
+        self.moving_centroids = False
+        self.goal_centroids = [None for i in range(k)]
         
     def distance(self, v1, v2):
         """
@@ -72,13 +74,22 @@ class KMeans:
                 change = self.distance(mean, centroid)
                 if change > max_change:
                     max_change = change
-                print('change', i, change)
+                # print('change', i, change)
                 c = centroid
                 # self.centroids[i] = [lerp(centroid[i], mean[i], 0.1) for i in range(len(mean))]
-                self.centroids[i] = mean
+                self.goal_centroids[i] = mean
+                # self.centroids[i] = mean
+
                 # print(mean)
         self.change = max_change
         
+    def update_centroids(self):
+        for i in range(self.k):
+            self.centroids[i] = [lerp(self.centroids[i][j], self.goal_centroids[i][j], 0.05) for j in range(len(self.centroids[i]))]
+            
+        if self.distance(self.centroids[0], self.goal_centroids[0]) < 1:
+            self.moving_centroids = False
+            
     def show_points(self):
         noStroke()
         for centroid_index, points in self.centroid_assignments.items():
@@ -88,10 +99,10 @@ class KMeans:
     
     def show_centroids(self):
         stroke(0)
-        strokeWeight(3)
+        strokeWeight(2)
         for i, x in enumerate(self.centroids):
             fill(i* 100, 255, 255)
-            ellipse(x[0], x[1], 30, 30)
+            rect(x[0], x[1], 10, 10)
 
     def k_means(self):
         """

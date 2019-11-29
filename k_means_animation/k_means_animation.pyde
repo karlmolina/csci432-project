@@ -1,5 +1,9 @@
 from k_means import KMeans
 import random
+import time
+
+started = False
+background_color = 255
 
 def setup():
     # random.seed(1)
@@ -8,27 +12,44 @@ def setup():
     size(600, 600)
     pixelDensity(2)
     # noFill()
-    background(0)
+    background(background_color)
     stroke(255)
     noStroke()
     colorMode(HSB)
-    frameRate(1)
+    # frameRate(1)
     
     data = load_data('../generate_convex_clusters/data/without_noise.csv')
     global k_means
-    k_means = KMeans(data, 3, 0.01)
+    k_means = KMeans(data, 3, 1)
     k_means.initialize_centroids()
+    k_means.assign_data()
+            
+    k_means.show_points()
+    k_means.show_centroids()
     
 def draw():
+    global started
+    if not started:
+        time.sleep(1)
+        started = True
+        return
+    
     global k_means
     if not k_means.is_converged():
-        background(0)
-        k_means.assign_data()
+        if not k_means.moving_centroids:
+            background(background_color)
+            k_means.assign_data()
+            
+            k_means.show_points()
+            k_means.show_centroids()
         
-        k_means.show_points()
-        k_means.show_centroids()
-    
-        k_means.move_centroids()
+            k_means.move_centroids()
+            k_means.moving_centroids = True
+        else:
+            background(background_color)
+            k_means.show_points()
+            k_means.show_centroids()
+            k_means.update_centroids()
         
     
     # print(k_means.centroids)
