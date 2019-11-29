@@ -50,7 +50,8 @@ def draw():
             k_means.show_points()
             k_means.show_centroids()
             k_means.update_centroids()
-        
+    else:
+        exit()
     
     # print(k_means.centroids)
     
