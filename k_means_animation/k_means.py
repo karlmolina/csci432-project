@@ -1,11 +1,12 @@
 import random
 from operator import add
+from copy import deepcopy
 
 class KMeans:
     def __init__(self, data, k, min_change):
         self.data = data
         self.k = k
-        self.change = 0
+        self.change = 10 ** 10
         self.centroids = []
         self.centroid_assignments = {}
         self.min_change = min_change
@@ -23,6 +24,9 @@ class KMeans:
             distance += pow((abs(v1[i] - v2[i])), 2)
         return sqrt(distance)
     
+    def is_converged(self):
+        return self.change < self.min_change
+    
     def initialize_centroids(self):
         # Generates the initial centroids and saves them
         for i in range(self.k):
@@ -30,7 +34,7 @@ class KMeans:
     
     def assign_data(self):
         # centroids is the dictionary that contains all of the vectors that are assigned to a centroid in u
-        self.centroid_assignments = {}  # centroid: list of vectors
+        self.centroid_assignments = {i: [] for i in range(self.k)}  # centroid: list of vectors
         for x in self.data:
             minDistance = None
             closest_centroid_index = None
@@ -59,18 +63,35 @@ class KMeans:
             temp = self.centroid_assignments[i]
             
             # calculates the mean values of the vectors
-            total = temp[0]
-            for j in temp[1:]:
-                total = map(add, total, j)
-            mean = [x / len(temp) for x in total]
-            change = self.distance(mean, centroid)
-            if change > max_change:
-                max_change = change
-            print('change', i, change)
-            self.centroids[i] = mean
-            ellipse(mean[0], mean[1], 30, 30)
-            # print(mean)
+            if len(temp) != 0:
+                total = temp[0]
+                for j in temp[1:]:
+                    total = map(add, total, j)
+                    
+                mean = [x / len(temp) for x in total]
+                change = self.distance(mean, centroid)
+                if change > max_change:
+                    max_change = change
+                print('change', i, change)
+                c = centroid
+                # self.centroids[i] = [lerp(centroid[i], mean[i], 0.1) for i in range(len(mean))]
+                self.centroids[i] = mean
+                # print(mean)
         self.change = max_change
+        
+    def show_points(self):
+        noStroke()
+        for centroid_index, points in self.centroid_assignments.items():
+            fill(centroid_index * 100, 255, 255)
+            for p in points:
+                ellipse(p[0], p[1], 5, 5)
+    
+    def show_centroids(self):
+        stroke(0)
+        strokeWeight(3)
+        for i, x in enumerate(self.centroids):
+            fill(i* 100, 255, 255)
+            ellipse(x[0], x[1], 30, 30)
 
     def k_means(self):
         """
