@@ -18,9 +18,12 @@ def setup():
     colorMode(HSB)
     # frameRate(1)
     
-    data = load_data('../generate_convex_clusters/data/without_noise.csv')
+    data = load_data('../generate_clusters/data/without_noise.csv')
     global k_means
-    k_means = KMeans(data, 3, 1)
+    k = 2
+    min_change = 1
+    centroid_lerp_value = 0.01
+    k_means = KMeans(data, k, min_change, centroid_lerp_value)
     k_means.initialize_centroids()
     k_means.assign_data()
             
@@ -50,10 +53,8 @@ def draw():
             k_means.show_points()
             k_means.show_centroids()
             k_means.update_centroids()
-    else:
-        exit()
-    
-    # print(k_means.centroids)
+    # else:
+    #     exit()
     
 def load_data(filename):
     data = []

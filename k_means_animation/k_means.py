@@ -3,10 +3,11 @@ from operator import add
 from copy import deepcopy
 
 class KMeans:
-    def __init__(self, data, k, min_change):
+    def __init__(self, data, k, min_change, centroid_lerp_value):
         self.data = data
         self.k = k
-        self.change = 10 ** 10
+        self.centroid_lerp_value = centroid_lerp_value
+        self.change = 1000
         self.centroids = []
         self.centroid_assignments = {}
         self.min_change = min_change
@@ -85,7 +86,7 @@ class KMeans:
         
     def update_centroids(self):
         for i in range(self.k):
-            self.centroids[i] = [lerp(self.centroids[i][j], self.goal_centroids[i][j], 0.05) for j in range(len(self.centroids[i]))]
+            self.centroids[i] = [lerp(self.centroids[i][j], self.goal_centroids[i][j], self.centroid_lerp_value) for j in range(len(self.centroids[i]))]
             
         if self.distance(self.centroids[0], self.goal_centroids[0]) < 1:
             self.moving_centroids = False
