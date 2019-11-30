@@ -18,7 +18,10 @@ def setup():
     data = load_data('../generate_convex_clusters/data/with_noise.csv')
     global dbscan
     # dbscan = Dbscan(data, 5, 20)
-    dbscan = Dbscan(data, 5, 20)
+    min_pts = 1
+    eps = 22
+    process_amount = 10
+    dbscan = Dbscan(data, min_pts, eps, process_amount)
     print(len(data))
     print(len(dbscan.labels))
     

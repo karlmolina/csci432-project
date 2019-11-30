@@ -1,8 +1,9 @@
 class Dbscan:
-    def __init__(self, data, min_pts, eps):
+    def __init__(self, data, min_pts, eps, process_amount):
         self.min_pts = min_pts
         self.eps = eps
         self.data = data
+        self.process_amount = process_amount
         self.core_points = []
         self.border_points = []
         self.noise_points = []
@@ -39,7 +40,7 @@ class Dbscan:
                 fill(0)
             else:
                 noStroke()
-                fill((self.labels[i]) * 100, 255, 255)
+                fill((self.labels[i] - 1) * 70, 255, 255)
             ellipse(p[0], p[1], 5, 5)
             
     def neighbors(self, p):
@@ -52,45 +53,47 @@ class Dbscan:
         return neighbors
             
     def run(self):
-        if self.index == len(self.data):
-            self.state = 2
-            return False
-        
-        if self.state == 0:
-            if self.labels[self.index] is not None:
-                while self.labels[self.index] is not None:
-                    self.index += 1
-                return False
-            neighbors = self.neighbors(self.data[self.index])
-            if len(neighbors) < self.min_pts:
-                self.labels[self.index] = 'noise'
-                self.index += 1
-                return True
-            self.cluster_label += 1
-            self.labels[self.index] = self.cluster_label
-            self.seed_list = neighbors
-            self.state = 1
-            self.index += 1
-        elif self.state == 1:
-            if self.seed_index == len(self.seed_list):
-                self.seed_index = 0
-                self.state = 0
-                return False
-            index = self.seed_list[self.seed_index]
-            if self.labels[index] == 'noise':
-                self.labels[index] = self.cluster_label
-                return True
-            if self.labels[index] is not None:
-                self.seed_index += 1
-                return False
-            self.labels[index] = self.cluster_label
-            neighbors = self.neighbors(self.data[index])
-            if len(neighbors) >= self.min_pts:
-                s = set(neighbors)
-                seed_set = set(self.seed_list)
-                for x in s:
-                    if x not in seed_set:
-                        self.seed_list.append(x)
-            self.seed_index += 1
+        for _ in range(self.process_amount):
+            if self.index == len(self.data):
+                self.state = 2
+                return
             
-        return True
+            if self.state == 0:
+                if self.labels[self.index] is not None:
+                    while self.labels[self.index] is not None:
+                        self.index += 1
+                        if self.index == len(self.data):
+                            return
+                    continue
+                neighbors = self.neighbors(self.data[self.index])
+                if len(neighbors) < self.min_pts:
+                    self.labels[self.index] = 'noise'
+                    self.index += 1
+                    continue
+                self.cluster_label += 1
+                self.labels[self.index] = self.cluster_label
+                self.seed_list = neighbors
+                self.state = 1
+                self.index += 1
+            elif self.state == 1:
+                if self.seed_index == len(self.seed_list):
+                    self.seed_index = 0
+                    self.state = 0
+                    continue
+                index = self.seed_list[self.seed_index]
+                if self.labels[index] == 'noise':
+                    self.labels[index] = self.cluster_label
+                    continue
+                if self.labels[index] is not None:
+                    self.seed_index += 1
+                    continue
+                self.labels[index] = self.cluster_label
+                neighbors = self.neighbors(self.data[index])
+                if len(neighbors) >= self.min_pts:
+                    s = set(neighbors)
+                    seed_set = set(self.seed_list)
+                    for x in s:
+                        if x not in seed_set:
+                            self.seed_list.append(x)
+                self.seed_index += 1
+                
