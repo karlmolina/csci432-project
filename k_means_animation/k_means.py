@@ -2,19 +2,31 @@ import random
 from operator import add
 from copy import deepcopy
 
+def load_data(filename):
+    data = []
+    for line in loadStrings(filename):
+        x = line.split(',')
+        x = [int(a) for a in x]
+        data.append(x)
+    
+    return data
+
 class KMeans:
-    def __init__(self, data, k, min_change, centroid_lerp_value):
-        self.data = data
+    def __init__(self, filename, k, min_change, centroid_lerp_value, random_seed):
+        self.data = load_data(filename)
         self.k = k
         self.centroid_lerp_value = centroid_lerp_value
-        self.change = None
+        self.change = float('inf')
         self.centroids = []
         self.centroid_assignments = {}
         self.min_change = min_change
         self.moving_centroids = False
         self.goal_centroids = [None for i in range(k)]
         self.iteration = 0
-        
+        self.random_seed = random_seed
+        self.colors = [i * 200/k for i in range(k)]
+
+
     def distance(self, v1, v2):
         """
         Finds euclidean distance between two vectors.
@@ -32,6 +44,11 @@ class KMeans:
         if self.change is None:
             return False
         return self.change < self.min_change
+    
+    def initialize(self):
+        random.seed(self.random_seed)
+        self.initialize_centroids()
+        self.assign_data()
     
     def initialize_centroids(self):
         # Generates the initial centroids and saves them
@@ -97,8 +114,8 @@ class KMeans:
             
     def show_points(self):
         noStroke()
-        for centroid_index, points in self.centroid_assignments.items():
-            fill(centroid_index * 100, 255, 255)
+        for i, points in self.centroid_assignments.items():
+            fill(self.colors[i], 255, 225)
             for p in points:
                 ellipse(p[0], p[1], 5, 5)
     
@@ -106,7 +123,7 @@ class KMeans:
         stroke(0)
         strokeWeight(2)
         for i, x in enumerate(self.centroids):
-            fill(i* 100, 255, 255)
+            fill(self.colors[i], 255, 255)
             rect(x[0], x[1], 10, 10)
 
     def k_means(self):
@@ -131,3 +148,25 @@ class KMeans:
             print('self.change', self.change)
             if self.change <= self.min_change:
                 break
+    
+    def run(self):
+        if not self.is_converged():
+            if not self.moving_centroids:
+                self.assign_data()
+            
+                self.move_centroids()
+                self.moving_centroids = True
+            else:
+                self.update_centroids()
+            return False
+        return True
+                
+    def show(self):
+        self.show_points()
+        self.show_centroids()
+        fill(255)
+        noStroke()
+        rect(192, 16, 373, 20)
+        print(mouseX, mouseY)
+        fill(0)
+        text('k-means  k={}, min_change={}, iteration={}, change={:.2f}'.format(self.k, self.min_change, self.iteration, self.change), 10, 20)
