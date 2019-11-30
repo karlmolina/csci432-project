@@ -7,12 +7,13 @@ class KMeans:
         self.data = data
         self.k = k
         self.centroid_lerp_value = centroid_lerp_value
-        self.change = 1000
+        self.change = None
         self.centroids = []
         self.centroid_assignments = {}
         self.min_change = min_change
         self.moving_centroids = False
         self.goal_centroids = [None for i in range(k)]
+        self.iteration = 0
         
     def distance(self, v1, v2):
         """
@@ -28,6 +29,8 @@ class KMeans:
         return sqrt(distance)
     
     def is_converged(self):
+        if self.change is None:
+            return False
         return self.change < self.min_change
     
     def initialize_centroids(self):
@@ -59,6 +62,7 @@ class KMeans:
                 self.centroid_assignments[closest_centroid_index].append(x)
     
     def move_centroids(self):
+        self.iteration += 1
         # Moves the centroid point to the new mean of the assigned data
         max_change = 0
         for i, centroid in enumerate(self.centroids):
