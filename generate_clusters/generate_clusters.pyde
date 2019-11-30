@@ -1,23 +1,19 @@
 size(600, 600)
-# pixelDensity(2)
+pixelDensity(2)
 # noFill()
 background(0)
 stroke(255)
 noStroke()
+randomSeed(1)
 
-radius = 150
-offset_mag = 40
-hole_size = 40
-noise_amount = 1000
-# noise_amount = 0
-cluster_amount = 2000
     
-def generate(filename):
+def generate(filename, radius, offset_mag, hole_size, noise_amount, cluster_amount):
+    background(0)
     points = []
 
     def make_cluster(amount, angle, hole_size, radius, offset_mag, center):
         for i in range(amount):
-            r = PVector.random2D()
+            r = PVector.random2D(this)
             a = degrees(r.heading()) + 180
             if abs(a - angle) < hole_size:
                 continue
@@ -51,5 +47,12 @@ def generate(filename):
 
     saveStrings(filename, points)
 
-generate('data/with_noise.csv')
-# saveFrame('with_noise.jpeg')
+radius = 150
+offset_mag = 10
+hole_size = 40
+noise_amount = 0
+# noise_amount = 0
+cluster_amount = 300
+
+generate('data/without_noise.csv', radius, offset_mag, hole_size, noise_amount, cluster_amount)
+generate('data/with_noise.csv', radius, offset_mag, hole_size, 200, cluster_amount)

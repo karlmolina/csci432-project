@@ -4,15 +4,14 @@ pixelDensity(2)
 background(0)
 stroke(255)
 noStroke()
-
-noise_amount = 0
+randomSeed(1)
 gaussian = False
-
-def generate_convex_clusters(filename):
+def generate_convex_clusters(filename, noise_amount):
+    background(0)
     points = []
     def generate_cluster(center, amount, radius):
         for i in range(amount):
-            r = PVector.random2D()
+            r = PVector.random2D(this)
             
             if gaussian:
                 while True:
@@ -41,5 +40,5 @@ def generate_convex_clusters(filename):
 
     saveStrings(filename, points)
 
-
-generate_convex_clusters('data/without_noise.csv')
+generate_convex_clusters('data/without_noise.csv', 0)
+generate_convex_clusters('data/with_noise.csv', 200)
