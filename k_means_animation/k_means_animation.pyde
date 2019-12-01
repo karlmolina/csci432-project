@@ -47,10 +47,10 @@ def draw():
     
     k_means.show()
     
-    if not started:
-        if frameCount == 100:
-            started = True
-        return
+    # if not started:
+    #     if frameCount == 100:
+    #         started = True
+    #     return
     
     if k_means.run() and index < len(k_means_list) - 1:
         index += 1

@@ -25,6 +25,7 @@ class KMeans:
         self.iteration = 0
         self.random_seed = random_seed
         self.colors = [i * 200/k for i in range(k)]
+        self.time = 0
 
 
     def distance(self, v1, v2):
@@ -48,7 +49,7 @@ class KMeans:
     def initialize(self):
         random.seed(self.random_seed)
         self.initialize_centroids()
-        self.assign_data()
+        # self.assign_data()
     
     def initialize_centroids(self):
         # Generates the initial centroids and saves them
@@ -114,10 +115,17 @@ class KMeans:
             
     def show_points(self):
         noStroke()
-        for i, points in self.centroid_assignments.items():
-            fill(self.colors[i], 255, 225)
-            for p in points:
+        if len(self.centroid_assignments) == 0:
+            for p in self.data:
+                fill(255)
+                stroke(0)
+                strokeWeight(1)
                 ellipse(p[0], p[1], 5, 5)
+        else:
+            for i, points in self.centroid_assignments.items():
+                fill(self.colors[i], 255, 225)
+                for p in points:
+                    ellipse(p[0], p[1], 5, 5)
     
     def show_centroids(self):
         stroke(0)
@@ -150,6 +158,12 @@ class KMeans:
                 break
     
     def run(self):
+        self.time += 1
+        if self.time < 100:
+            return False
+        elif self.time < 200:
+            self.assign_data()
+            return False
         if not self.is_converged():
             if not self.moving_centroids:
                 self.assign_data()
@@ -167,6 +181,5 @@ class KMeans:
         fill(255)
         noStroke()
         rect(192, 16, 373, 20)
-        print(mouseX, mouseY)
         fill(0)
         text('k-means  k={}, min_change={}, iteration={}, change={:.2f}'.format(self.k, self.min_change, self.iteration, self.change), 10, 20)
