@@ -2,52 +2,36 @@ from dbscan import Dbscan
 import time
 
 background_color = 255
+index = 0
 
 def setup():
-    # random.seed(1)
-    # random.seed(6)
-    # random.seed(6)
     size(600, 600)
     pixelDensity(2)
-    # noFill()
     background(background_color)
     stroke(255)
     noStroke()
     colorMode(HSB)
-    
-    data = load_data('../generate_convex_clusters/data/with_noise.csv')
-    global dbscan
-    # dbscan = Dbscan(data, 5, 20)
-    min_pts = 1
-    eps = 22
-    process_amount = 10
-    dbscan = Dbscan(data, min_pts, eps, process_amount)
-    print(len(data))
-    print(len(dbscan.labels))
+
+    global dbscan_list
+    process_amount = 20
+    dbscan_list = [
+               Dbscan('../generate_clusters/data/without_noise.csv', 3, 30, process_amount),
+               Dbscan('../generate_clusters/data/with_noise.csv', 4, 20, process_amount),
+               Dbscan('../generate_convex_clusters/data/without_noise.csv', 3, 20, process_amount),
+               Dbscan('../generate_convex_clusters/data/with_noise.csv', 4, 18, process_amount),
+               ]
+               
     
 def draw():
-    
-    
-    # dbscan.show_points()
-    # noFill()
-    # stroke(0)
-    # ellipse(mouseX, mouseY, dbscan.eps *2, dbscan.eps *2)
-    # noStroke()
-    
-    global dbscan
+    global dbscan_list
+    global index
     background(255)
+    dbscan = dbscan_list[index]
     dbscan.show_points()
-    dbscan.run()
+    if dbscan.run() and index < len(dbscan_list) - 1:
+        index += 1
         
         
     
     
     
-def load_data(filename):
-    data = []
-    for line in loadStrings(filename):
-        x = line.split(',')
-        x = [int(a) for a in x]
-        data.append(x)
-    
-    return data

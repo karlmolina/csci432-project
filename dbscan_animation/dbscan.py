@@ -1,22 +1,28 @@
+def load_data(filename):
+    data = []
+    for line in loadStrings(filename):
+        x = line.split(',')
+        x = [int(a) for a in x]
+        data.append(x)
+    
+    return data
+
 class Dbscan:
-    def __init__(self, data, min_pts, eps, process_amount):
+    def __init__(self, filename, min_pts, eps, process_amount):
         self.min_pts = min_pts
         self.eps = eps
-        self.data = data
         self.process_amount = process_amount
-        self.core_points = []
-        self.border_points = []
-        self.noise_points = []
-        self.labels = [None for _ in range(len(data))]
+        self.data = load_data(filename)
+        self.labels = [None for _ in range(len(self.data))]
         # None unlabeled
         # 'noise' noise point
         # int some cluster label
         self.index = 0
         self.state = 0
         self.cluster_label = 0
-        self.seed_set = set()
         self.seed_list = []
         self.seed_index = 0
+        self.time = 0
         
     def distance(self, v1, v2):
         distance = 0
@@ -53,17 +59,23 @@ class Dbscan:
         return neighbors
             
     def run(self):
+        if self.state == 2:
+            if self.time < 100:
+                self.time += 1
+                return False
+            else:
+                return True
         for _ in range(self.process_amount):
             if self.index == len(self.data):
                 self.state = 2
-                return
+                return False
             
             if self.state == 0:
                 if self.labels[self.index] is not None:
                     while self.labels[self.index] is not None:
                         self.index += 1
                         if self.index == len(self.data):
-                            return
+                            return False
                     continue
                 neighbors = self.neighbors(self.data[self.index])
                 if len(neighbors) < self.min_pts:
@@ -96,4 +108,4 @@ class Dbscan:
                         if x not in seed_set:
                             self.seed_list.append(x)
                 self.seed_index += 1
-                
+        return False
