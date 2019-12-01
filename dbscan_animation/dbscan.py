@@ -8,7 +8,7 @@ def load_data(filename):
     return data
 
 class Dbscan:
-    def __init__(self, filename, min_pts, eps, process_amount):
+    def __init__(self, filename, min_pts, eps, process_amount, colors):
         self.min_pts = min_pts
         self.eps = eps
         self.process_amount = process_amount
@@ -23,18 +23,13 @@ class Dbscan:
         self.seed_list = []
         self.seed_index = 0
         self.time = 0
-        
+        self.colors = colors
+    
     def distance(self, v1, v2):
         distance = 0
         for i in range(len(v1)):
             distance += pow((abs(v1[i] - v2[i])), 2)
         return sqrt(distance)
-        
-    def labeled_all_points(self):
-        return len(self.data) == 0    
-    
-    def label_points(self):
-        pass
         
     def show_points(self):
         for i, p in enumerate(self.data):
@@ -46,8 +41,16 @@ class Dbscan:
                 fill(0)
             else:
                 noStroke()
-                fill((self.labels[i] - 1) * 70, 255, 255)
+                fill(self.colors[self.labels[i]], 255, 255)
             ellipse(p[0], p[1], 5, 5)
+    
+    def show(self):
+        self.show_points()
+        noStroke()
+        fill(255)
+        rect(192, 16, 373, 20)
+        fill(0)
+        text('DBSCAN  eps={}, min_pts={}'.format(self.eps, self.min_pts), 10, 20)
             
     def neighbors(self, p):
         neighbors = []
