@@ -1,4 +1,5 @@
 import random
+from math import sqrt
 from operator import add
 from copy import deepcopy
 
@@ -10,6 +11,9 @@ def load_data(filename):
         data.append(x)
     
     return data
+
+from p5 import ellipse
+
 
 class KMeans:
     def __init__(self, filename, k, min_change, centroid_lerp_value, random_seed):
